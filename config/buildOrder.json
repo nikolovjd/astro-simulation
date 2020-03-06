@@ -1,0 +1,186 @@
+[
+  {
+    "metalRefineries": 8,
+    "roboticFactories": 3,
+    "shipyards": 4,
+    "spaceports": 5,
+    "fighter": 1
+  },
+  {
+    "metalRefineries": 9,
+    "roboticFactories": 4,
+    "crystalMines": 4,
+    "shipyards": 4,
+    "spaceports": 5,
+    "fighter": 1,
+    "researchLabs": 8
+  },
+  {
+    "metalRefineries": 9,
+    "roboticFactories": 4,
+    "crystalMines": 4,
+    "shipyards": 4,
+    "spaceports": 5,
+    "researchLabs": 8
+  },
+  {
+    "metalRefineries": 10,
+    "roboticFactories": 5,
+    "crystalMines": 4,
+    "shipyards": 5,
+    "spaceports": 5,
+    "fighter": 20,
+    "researchLabs": 8
+  },
+  {
+    "metalRefineries": 11,
+    "roboticFactories": 6,
+    "crystalMines": 5,
+    "shipyards": 6,
+    "naniteFactories": 1,
+    "economicCenters": 2,
+    "spaceports": 10,
+    "fighter": 20,
+    "researchLabs": 10
+  },
+  {
+    "metalRefineries": 12,
+    "roboticFactories": 7,
+    "shipyards": 7,
+    "naniteFactories": 2,
+    "economicCenters": 3,
+    "crystalMines": 6,
+    "spaceports": 10,
+    "fighter": 40,
+    "researchLabs": 10
+  },
+  {
+    "metalRefineries": 13,
+    "roboticFactories": 8,
+    "shipyards": 8,
+    "naniteFactories": 2,
+    "economicCenters": 3,
+    "crystalMines": 6,
+    "spaceports": 10,
+    "fighter": 50,
+    "researchLabs": 10
+  },
+  {
+    "metalRefineries": 14,
+    "roboticFactories": 9,
+    "shipyards": 10,
+    "naniteFactories": 4,
+    "economicCenters": 5,
+    "crystalMines": 8,
+    "spaceports": 15,
+    "fighter": 50,
+    "researchLabs": 10
+  },
+  {
+    "metalRefineries": 15,
+    "roboticFactories": 10,
+    "shipyards": 12,
+    "naniteFactories": 5,
+    "economicCenters": 6,
+    "crystalMines": 9,
+    "spaceports": 15,
+    "fighter": 100,
+    "researchLabs": 12
+  },
+  {
+    "metalRefineries": 16,
+    "roboticFactories": 11,
+    "shipyards": 12,
+    "naniteFactories": 6,
+    "economicCenters": 7,
+    "crystalMines": 10,
+    "spaceports": 15,
+    "androidFactories": 1,
+    "fighter": 200,
+    "researchLabs": 16
+  },
+  {
+    "metalRefineries": 17,
+    "roboticFactories": 12,
+    "shipyards": 12,
+    "naniteFactories": 7,
+    "economicCenters": 8,
+    "crystalMines": 11,
+    "spaceports": 15,
+    "androidFactories": 2,
+    "fighter": 250,
+    "researchLabs": 16
+  },
+  {
+    "metalRefineries": 18,
+    "roboticFactories": 13,
+    "shipyards": 13,
+    "naniteFactories": 9,
+    "economicCenters": 10,
+    "crystalMines": 13,
+    "spaceports": 20,
+    "androidFactories": 4,
+    "fighter": 1000,
+    "researchLabs": 20
+  },
+  {
+    "metalRefineries": 20,
+    "roboticFactories": 15,
+    "shipyards": 16,
+    "naniteFactories": 10,
+    "economicCenters": 11,
+    "crystalMines": 14,
+    "spaceports": 20,
+    "androidFactories": 5,
+    "fighter": 1000,
+    "researchLabs": 20
+  },
+  {
+    "metalRefineries": 21,
+    "roboticFactories": 16,
+    "shipyards": 16,
+    "naniteFactories": 11,
+    "economicCenters": 12,
+    "crystalMines": 15,
+    "spaceports": 20,
+    "androidFactories": 1,
+    "capital": 1,
+    "researchLabs": 22
+  },
+  {
+    "metalRefineries": 23,
+    "roboticFactories": 18,
+    "shipyards": 18,
+    "orbitalShipyards": 3,
+    "naniteFactories": 13,
+    "economicCenters": 14,
+    "crystalMines": 17,
+    "spaceports": 25,
+    "androidFactories": 8,
+    "capital": 3
+  },
+  {
+    "metalRefineries": 25,
+    "roboticFactories": 20,
+    "shipyards": 20,
+    "orbitalShipyards": 5,
+    "naniteFactories": 15,
+    "economicCenters": 16,
+    "crystalMines": 19,
+    "spaceports": 25,
+    "androidFactories": 10,
+    "capital": 5
+  },
+  {
+    "metalRefineries": 27,
+    "roboticFactories": 22,
+    "shipyards": 22,
+    "orbitalShipyards": 6,
+    "naniteFactories": 17,
+    "economicCenters": 18,
+    "crystalMines": 21,
+    "spaceports": 25,
+    "androidFactories": 11,
+    "capital": 9
+  }
+]

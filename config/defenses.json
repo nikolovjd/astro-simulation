@@ -1,0 +1,331 @@
+{
+  "barracks": {
+    "baseCost": 5,
+    "weapon": "laser",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1
+      },
+      "technologies": [
+        {
+          "laser": 1
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 4
+      },
+      {
+        "armour": "power",
+        "type": "value",
+        "value": 4
+      }
+    ]
+  },
+
+  "laserTurrets": {
+    "baseCost": 10,
+    "weapon": "laser",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "energy": 1,
+        "population": 1
+      },
+      "technologies": [
+        {
+          "laser": 1
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 8
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 8
+      }
+    ]
+  },
+
+  "missileTurrets": {
+    "baseCost": 20,
+    "weapon": "missile",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 1
+      },
+      "technologies": [
+        {
+          "missiles": 1
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 16
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 16
+      }
+    ]
+  },
+
+  "plasmaTurrets": {
+    "baseCost": 100,
+    "weapon": "plasma",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 2
+      },
+      "technologies": [
+        {
+          "plasma": 1,
+          "armour": 6
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 24
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 24
+      }
+    ]
+  },
+
+  "ionTurrets": {
+    "baseCost": 256,
+    "weapon": "ion",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 3
+      },
+      "technologies": [
+        {
+          "ion": 1,
+          "armour": 10,
+          "shielding": 2
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 32
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 32
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 2
+      }
+    ]
+  },
+
+  "photonTurrets": {
+    "baseCost": 1024,
+    "weapon": "photon",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 4
+      },
+      "technologies": [
+        {
+          "photon": 1,
+          "armour": 14,
+          "shielding": 6
+
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 64
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 64
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 6
+      }
+    ]
+  },
+
+  "disruptorTurrets": {
+    "baseCost": 4096,
+    "weapon": "disruptor",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 8
+      },
+      "technologies": [
+        {
+          "disruptor": 1,
+          "armour": 18,
+          "shielding": 8
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 256
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 256
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 8
+      }
+    ]
+  },
+
+  "deflectionShields": {
+    "baseCost": 4096,
+    "weapon": "ion",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 8
+      },
+      "technologies": [
+        {
+          "ion": 6,
+          "shielding": 10
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 2
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 512
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 16
+      }
+    ]
+  },
+
+  "planetaryShield": {
+    "baseCost": 25000,
+    "weapon": "ion",
+    "requirements": {
+      "stats": {
+        "area": 1,
+        "population": 1,
+        "energy": 16
+      },
+      "technologies": [
+        {
+          "ion": 10,
+          "shielding": 14
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 4
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 2048
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 20
+      }
+    ]
+  },
+
+  "planetaryRing": {
+    "baseCost": 50000,
+    "weapon": "photon",
+    "requirements": {
+      "stats": {
+        "population": 1,
+        "energy": 24
+      },
+      "technologies": [
+        {
+          "photon": 10,
+          "armour": 22,
+          "shielding": 12
+        }
+      ]
+    },
+    "stats": [
+      {
+        "stat": "power",
+        "type": "value",
+        "value": 2048
+      },
+      {
+        "stat": "armour",
+        "type": "value",
+        "value": 1024
+      },
+      {
+        "stat": "shield",
+        "type": "value",
+        "value": 12
+      }
+    ]
+  }
+}

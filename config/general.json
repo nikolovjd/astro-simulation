@@ -1,0 +1,11 @@
+{
+  "incomeCron": "0 * * * *",
+  "base": {
+    "cost": 50,
+    "multiplier": 1.5,
+    "maxQueueLength": 20,
+    "startingConstruction": 240,
+    "buildingDowngradeRefund": 50,
+    "buildingCancelRefund": 75
+  }
+}
