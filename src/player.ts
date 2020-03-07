@@ -11,6 +11,7 @@ export class Player {
   public bases: Base[] = [];
   public reaserch: Research = new Research();
   public basesToBuild = [];
+  public waitingHours = 0;
   constructor(private startTick: Date, public strategy: BaseStrategy) {
     this.bases.push(
       new Base(Terrains.EARTHLY, AstroTypes.PLANET, 3, this, true),
@@ -53,22 +54,31 @@ export class Player {
 
   public tick(time: Date) {
     if (this.basesToBuild.length) {
-      const cost = this.getNextBaseCost();
-      if (this.basesToBuild[0].end <= time && cost <= this.credits) {
-        this.credits -= cost;
-        const baseData = this.strategy(this.bases.length);
-        this.bases.push(
-          new Base(baseData.terrain, baseData.type, baseData.position, this),
-        );
-        if (this.bases.length === 10) {
-          this.bases[1].setResearchBase();
+      if (this.basesToBuild[0].end <= time) {
+        const cost = this.getNextBaseCost();
+        if (cost <= this.credits) {
+          this.credits -= cost;
+          const baseData = this.strategy(this.bases.length);
+          this.bases.push(
+            new Base(baseData.terrain, baseData.type, baseData.position, this),
+          );
+          if (this.bases.length === 2) {
+            this.bases[0].setResearchBase();
+          }
+          if (this.bases.length === 8) {
+            this.bases[1].setResearchBase();
+          }
+          if (this.bases.length === 10) {
+            this.bases[2].setResearchBase();
+          }
+          if (this.bases.length === 10) {
+            this.bases[3].isCapital = true;
+          }
+          this.basesToBuild.shift();
+          this.waitingHours = 0;
+        } else {
+          this.waitingHours++;
         }
-        if (this.bases.length === 10) {
-          this.bases[3].isCapital = true;
-        }
-        this.basesToBuild.shift();
-      } else {
-        // console.log('WAITING FOR CREDS');
       }
     }
 
@@ -76,6 +86,14 @@ export class Player {
       this.isBuildOrderDone() &&
       !this.basesToBuild.length &&
       this.credits > 100
+    ) {
+      this.credits -= 100;
+      this.basesToBuild.push({
+        end: new Date(time.getTime() + 60 * 60 * 4000),
+      });
+    } else if (
+      this.credits > this.getNextBaseCost() * 1.1 &&
+      !this.basesToBuild.length
     ) {
       this.credits -= 100;
       this.basesToBuild.push({
@@ -111,7 +129,9 @@ export class Player {
     const maxFleetMaintenance = Math.round(economy * 0.3);
     const fleetAboveLimit = freeFleet < fleet ? fleet - freeFleet : 0;
 
-    return Math.min(maxFleetMaintenance, Math.pow(fleetAboveLimit / 125, 0.7)); // TODO:
+    return Math.round(
+      Math.min(maxFleetMaintenance, Math.pow(fleetAboveLimit / 125, 0.7)),
+    );
   }
 
   public getCapitalCount() {

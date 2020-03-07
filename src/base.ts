@@ -221,7 +221,7 @@ export class Base {
     // Set TRs if possible
     this.doTradeRoutes();
 
-    if (this.owner.bases.length >= 10) {
+    if (this.owner.bases.length >= 7) {
       this.doProduction(time, nextTick);
     }
     constructionDone = this.doConstruction(time, nextTick);
@@ -239,6 +239,7 @@ export class Base {
 
     if (missingTR > 0) {
       if (this.owner.bases.length >= 10) {
+        this.trades = 0;
         // LD
         while (missingTR > 0 && this.owner.credits >= 2000) {
           this.owner.credits -= 2000;
@@ -374,6 +375,7 @@ export class Base {
       if (this.doesntHaveCreditsForAnyTech(missingTechs)) {
         return true;
       }
+
       const researchableTech = shuffle(
         missingTechs.filter(
           t =>
@@ -385,7 +387,7 @@ export class Base {
       if (!researchableTech.length) {
         return true;
       } else {
-        while (researchableTech) {
+        while (researchableTech.length) {
           if (this.cantResearchAnyTech(researchableTech)) {
             return true;
           }
@@ -400,29 +402,36 @@ export class Base {
           }
         }
       }
-    } else {
-      const techsToResearch = this.getResearchableTechsByCost();
-      if (!techsToResearch.length) {
-        return true;
-      }
-      const cheapestCost = this.calculateResearchCost(techsToResearch[0]);
-      if (this.owner.credits < cheapestCost || this.owner.basesToBuild.length) {
-        return true;
-      }
-      const techs = shuffle(techsToResearch);
-      while (techs.length) {
-        const tech = techs.pop();
-        const cost = this.calculateResearchCost(tech);
+    } else if (!this.owner.basesToBuild.length) {
+      const missingTechs = this.getMissingTechnologies(true);
+      if (!this.doesntHaveCreditsForAnyTech(missingTechs)) {
+        const researchableTech = shuffle(
+          missingTechs.filter(
+            t =>
+              this.hasTechnologyForTechnology(t) &&
+              this.hasResearchLabsForTech(t),
+          ),
+        );
 
-        if (cost <= this.owner.credits && !this.owner.isResearching(tech)) {
-          this.owner.credits -= cost;
-          const end = this.getResearchEndTime(researchStart, cost);
-          this.currentResearch = { end, research: tech };
-          return end >= nextTick;
+        if (researchableTech.length) {
+          while (researchableTech) {
+            if (this.cantResearchAnyTech(researchableTech)) {
+              break;
+            }
+            const tech = researchableTech.pop();
+            const cost = this.calculateResearchCost(tech);
+
+            if (cost <= this.owner.credits && !this.owner.isResearching(tech)) {
+              this.owner.credits -= cost;
+              const end = this.getResearchEndTime(researchStart, cost);
+              this.currentResearch = { end, research: tech };
+              return end >= nextTick;
+            }
+          }
         }
       }
-      return true;
     }
+    return true;
   }
 
   private doesntHaveCreditsForAnyBuilding(buildings: Buildings[]) {
@@ -454,20 +463,104 @@ export class Base {
     return false;
   }
 
+  private getHelpfulResearchByCost() {
+    let tech = [];
+
+    if (
+      this.owner.reaserch[Technologies.ARMOUR] >= 18 &&
+      this.owner.reaserch[Technologies.ENERGY] >= 18 &&
+      this.owner.reaserch[Technologies.COMPUTER] >= 18
+    ) {
+      tech.push(Technologies.CYBERNETICS);
+    }
+
+    if (
+      (this.owner.reaserch[Technologies.ARMOUR] < 22 &&
+        this.owner.reaserch[Technologies.ARMOUR] <
+          this.owner.reaserch[Technologies.ENERGY]) ||
+      (this.owner.reaserch[Technologies.ENERGY] >= 24 &&
+        this.owner.reaserch[Technologies.CYBERNETICS] >= 2)
+    ) {
+      tech.push(Technologies.ARMOUR);
+    }
+
+    if (
+      this.owner.reaserch[Technologies.ENERGY] < 24 &&
+      this.owner.reaserch[Technologies.ENERGY] <
+        this.owner.reaserch[Technologies.COMPUTER] + 2
+    ) {
+      tech.push(Technologies.ENERGY);
+    }
+
+    if (
+      this.owner.reaserch[Technologies.COMPUTER] < 24 &&
+      this.owner.reaserch[Technologies.COMPUTER] <
+        this.owner.reaserch[Technologies.ENERGY] + 2
+    ) {
+      tech.push(Technologies.COMPUTER);
+    }
+
+    if (this.owner.reaserch[Technologies.LASER] < 8) {
+      tech.push(Technologies.LASER);
+    }
+
+    if (
+      this.owner.bases.length >= 10 &&
+      this.owner.reaserch[Technologies.ARTIFICIAL_INTELLIGENCE] < 6
+    ) {
+      tech.push(Technologies.ARTIFICIAL_INTELLIGENCE);
+    }
+
+    tech = tech
+      .filter(
+        t =>
+          !this.owner.isResearching(t) &&
+          this.hasResearchLabsForTech(t) &&
+          this.hasTechnologyForTechnology(t),
+      )
+      .map(t => {
+        return {
+          technology: t,
+          cost: this.calculateResearchCost(t),
+        };
+      })
+      .sort((a, b) => a.cost - b.cost)
+      .map(t => t.technology);
+
+    if (!tech.length) {
+      return [
+        Technologies.ENERGY,
+        Technologies.COMPUTER,
+        Technologies.ARMOUR,
+        Technologies.ARTIFICIAL_INTELLIGENCE,
+        Technologies.CYBERNETICS,
+      ]
+        .filter(
+          t =>
+            !this.owner.isResearching(t) &&
+            this.hasResearchLabsForTech(t) &&
+            this.hasTechnologyForTechnology(t),
+        )
+        .map(t => {
+          return {
+            technology: t,
+            cost: this.calculateResearchCost(t),
+          };
+        })
+        .sort((a, b) => a.cost - b.cost)
+        .map(t => t.technology);
+    }
+
+    return tech;
+  }
+
   private getResearchableTechsByCost() {
     return [
       Technologies.ENERGY,
       Technologies.COMPUTER,
-      Technologies.ARMOUR,
       Technologies.LASER,
-      Technologies.MISSILES,
-      Technologies.STELLAR_DRIVE,
-      Technologies.PLASMA,
-      Technologies.SHIELDING,
-      Technologies.PHOTON,
-      Technologies.ION,
+      Technologies.ARMOUR,
       Technologies.ARTIFICIAL_INTELLIGENCE,
-      Technologies.DISRUPTOR,
       Technologies.CYBERNETICS,
     ]
       .filter(
@@ -510,7 +603,25 @@ export class Base {
       return baseCost;
     }
 
-    return Math.ceil(baseCost * Math.pow(1.5, level - 1));
+    let cost = baseCost * Math.pow(1.5, level - 1);
+
+    if (
+      building === Buildings.BIOSPHERE_MODIFICATION &&
+      this.type === AstroTypes.MOON &&
+      this.terrain !== Terrains.ASTEROID
+    ) {
+      cost *= 0.75;
+    }
+
+    if (
+      building === Buildings.BIOSPHERE_MODIFICATION &&
+      this.type === AstroTypes.MOON &&
+      this.terrain === Terrains.ASTEROID
+    ) {
+      cost *= 0.5;
+    }
+
+    return Math.ceil(cost);
   }
 
   private calculateResearchCost(technology: Technologies) {
@@ -535,9 +646,17 @@ export class Base {
     };
   }
 
-  private getMissingTechnologies() {
-    const missingBuildings = this.getMissingBuildings();
-    const missingDefenses = this.getMissingDefenses();
+  private getMissingTechnologies(next = false) {
+    const missingBuildings = this.getMissingBuildings(next);
+    if (this.owner.bases.length > 4) {
+      missingBuildings.push(Buildings.TERRAFORM);
+    }
+    if (this.owner.bases.length > 7) {
+      missingBuildings.push(Buildings.ORBITAL_BASE);
+    }
+    if (this.owner.bases.length > 9) {
+      missingBuildings.push(Buildings.MULTI_LEVEL_PLATFORMS);
+    }
     let missingTechnologies: Technologies[] = [];
 
     for (const building of missingBuildings) {
@@ -545,15 +664,6 @@ export class Base {
         missingTechnologies = [
           ...missingTechnologies,
           ...this.getMissingTechnologiesForBuilding(building),
-        ];
-      }
-    }
-
-    for (const building of missingDefenses) {
-      if (!this.hasTechnologyForDefense(building)) {
-        missingTechnologies = [
-          ...missingTechnologies,
-          ...this.getMissingTechnologiesForDefense(building),
         ];
       }
     }
@@ -581,8 +691,11 @@ export class Base {
     return missingDefenses;
   }
 
-  private getMissingBuildings() {
-    const order = buildOrderConfig[this.owner.bases.length - 1];
+  private getMissingBuildings(next = false) {
+    const order =
+      buildOrderConfig[
+        next ? this.owner.bases.length : this.owner.bases.length - 1
+      ];
     const buildOrderBuildings = [
       Buildings.METAL_REFINERIES,
       Buildings.ROBOTIC_FACTORIES,
@@ -602,7 +715,7 @@ export class Base {
       buildOrderBuildings.push(Buildings.CAPITAL);
     }
 
-    if (this.crystal > 2) {
+    if (this.crystal > 0) {
       buildOrderBuildings.push(Buildings.CRYSTAL_MINES);
     }
 
@@ -695,21 +808,6 @@ export class Base {
     if (this.isCapital && this[Buildings.CAPITAL] < order[Buildings.CAPITAL]) {
       return false;
     }
-    if (this[Defenses.MISSILE_TURRETS] < order[Defenses.MISSILE_TURRETS] || 0) {
-      return false;
-    }
-    if (this[Defenses.ION_TURRETS] < order[Defenses.ION_TURRETS] || 0) {
-      return false;
-    }
-    if (this[Defenses.PHOTON_TURRETS] < order[Defenses.PHOTON_TURRETS] || 0) {
-      return false;
-    }
-    if (
-      this[Defenses.DISRUPTOR_TURRETS] < order[Defenses.DISRUPTOR_TURRETS] ||
-      0
-    ) {
-      return false;
-    }
     return true;
   }
 
@@ -727,8 +825,32 @@ export class Base {
       .map(b => b.building);
   }
 
+  private getAreaCost(building: Buildings) {
+    if ((structuresConfig[building].requirements.stats.area || 0) === 0) {
+      return 0;
+    }
+    return Math.round(
+      (this.calculateBuildingCost(Buildings.MULTI_LEVEL_PLATFORMS) / 10 +
+        this.calculateBuildingCost(Buildings.TERRAFORM) / 5) /
+        2,
+    );
+  }
+
+  private getPopulationCost(building: Buildings) {
+    if ((structuresConfig[building].requirements.stats.population || 0) === 0) {
+      return 0;
+    }
+    return Math.round(
+      (this.calculateBuildingCost(Buildings.URBAN_STRUCTURES) / this.fertility +
+        this.calculateBuildingCost(Buildings.ORBITAL_BASE) / 10 +
+        this.calculateBuildingCost(Buildings.BIOSPHERE_MODIFICATION) /
+          this[Buildings.URBAN_STRUCTURES]) /
+        3,
+    );
+  }
+
   private getEnergyStructuresByEfficiency() {
-    return [
+    const energyStructures = [
       Buildings.SOLAR_PLANTS,
       Buildings.GAS_PLANTS,
       Buildings.FUSION_PLANTS,
@@ -737,22 +859,27 @@ export class Base {
     ]
       .filter(b => this.hasTechnologyForBuilding(b))
       .map(b => {
-        const energyStats = structuresConfig[b].stats[0];
+        const energyStats = structuresConfig[b].stats.find(
+          s => s.stat === 'energy',
+        );
         let energyProvided;
         if (energyStats.type === 'base') {
           energyProvided = this[energyStats.fromBase];
         } else {
-          energyProvided = this[energyStats.value];
+          energyProvided = energyStats.value;
         }
         const cost = this.calculateBuildingCost(b);
         return {
           building: b,
           cost,
-          efficiency: energyProvided / cost, // TODO: factor in area and pop cost
+          costPerEnergy:
+            (cost + this.getAreaCost(b) + this.getPopulationCost(b)) /
+            energyProvided,
         };
       })
-      .sort((a, b) => b.efficiency - a.efficiency)
-      .map(b => b.building);
+      .sort((a, b) => a.costPerEnergy - b.costPerEnergy);
+
+    return energyStructures.map(b => b.building);
   }
 
   private getPopulationBuildingsByEfficiency() {
